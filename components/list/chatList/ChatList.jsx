@@ -1,3 +1,4 @@
+import AddUser from './addUser/AddUser'
 import './chatList.css'
 import { useState } from 'react'
 
@@ -78,6 +79,9 @@ const chatList = () => {
           <p>Hello</p>
         </div>
       </div>
+      {
+        img && <AddUser />
+      }
     </div>
   )
 }
