@@ -1,6 +1,10 @@
 import './detail.css'
+import { useState } from 'react'
 
 const Detail = () => {
+const [showPhotos, setShowPhotos] = useState(true)
+
+
   return (
     <div className='detail'>
       <div className="user">
@@ -27,10 +31,10 @@ const Detail = () => {
         <div className="option">
           <div className="title">
             <span>Shared photos</span>
-            <img src="./arrowUp.png" alt="" />
+            <img src={showPhotos ? './arrowDown.png' : './arrowUp.png'} alt="" onClick={()=> setShowPhotos((prev) => !prev)}/>
           </div>
 
-          <div className="photos">
+          { showPhotos && (<div className="photos">
             <div className="photoItem">
               <div className="photoDetail">
                 <img src="./sample.jpg" alt="" />
@@ -62,7 +66,7 @@ const Detail = () => {
               </div>
               <img src="./download.png" alt="" className='icon' />
             </div>
-          </div>
+          </div> )}
         </div>
 
 
