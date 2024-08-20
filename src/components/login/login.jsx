@@ -22,6 +22,13 @@ const login = () => {
         toast.success("Please wait...")
     }
 
+    function handleRegister(e) {
+        e.preventDefault()
+        const formData = new FormData(e.target)
+        const {username, email, password} = Object.fromEntries(formData)
+        console.log (username, email, password)
+    }
+
     return (
         <div className="login">
             <div className="item">
@@ -35,7 +42,7 @@ const login = () => {
             <div className="separator"></div>
             <div className="item">
                 <h2>Create an Account</h2>
-                <form>
+                <form onSubmit={handleRegister}>
                     <img src={Img.url || "./avatar.png"} alt="" />
                     <input type="file" id='file' style={{ display: "none" }} onChange={handleImg} />
                     <label htmlFor="file">Upload an image</label>
