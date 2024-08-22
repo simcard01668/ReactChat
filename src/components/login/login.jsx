@@ -1,6 +1,9 @@
 import './login.css'
+import { auth, db, storage } from '../../lib/firebase'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { doc, setDoc } from 'firebase/firestore';
 
 const login = () => {
     const [Img, setImg] = useState({
@@ -22,11 +25,30 @@ const login = () => {
         toast.success("Please wait...")
     }
 
-    function handleRegister(e) {
+    async function handleRegister(e) {
         e.preventDefault()
         const formData = new FormData(e.target)
         const {username, email, password} = Object.fromEntries(formData)
-        console.log (username, email, password)
+    
+
+        try{
+            const res = await createUserWithEmailAndPassword(auth, email, password)
+            await setDoc(doc(db, "users", res.user.uid), {
+                username,
+                email,
+                id: res.user.uid,
+                blocked: []
+            })
+            
+            await setDoc(doc(db, "userchats", res.user.uid), {
+               chat: []
+            })
+
+            toast.success("User created successfully")
+        } catch(err) {
+            toast.error(err.message)
+            console.log(err)
+        }
     }
 
     return (
