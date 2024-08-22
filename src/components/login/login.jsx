@@ -1,9 +1,10 @@
 import './login.css'
-import { auth, db, storage } from '../../lib/firebase'
+import { auth, db, storage } from 'C:/Users/sim/Desktop/github/ReactChat/src/lib/firebase.js'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { doc, setDoc } from 'firebase/firestore';
+import upload from '../../lib/upload'
 
 const login = () => {
     const [Img, setImg] = useState({
@@ -33,9 +34,13 @@ const login = () => {
 
         try{
             const res = await createUserWithEmailAndPassword(auth, email, password)
+
+            const imgUrl = await upload(Img.file)
+
             await setDoc(doc(db, "users", res.user.uid), {
                 username,
                 email,
+                avatar: imgUrl,
                 id: res.user.uid,
                 blocked: []
             })
