@@ -1,5 +1,6 @@
 import './detail.css'
 import { useState } from 'react'
+import { auth } from '../../lib/firebase'
 
 const Detail = () => {
 const [showPhotos, setShowPhotos] = useState(true)
@@ -78,7 +79,7 @@ const [showPhotos, setShowPhotos] = useState(true)
         </div>
 
         <button className="button">Block User</button>
-        <button className="logout">Logout</button>
+        <button className="logout" onClick={()=> auth.signOut}>Logout</button>
 
       </div>
     </div >

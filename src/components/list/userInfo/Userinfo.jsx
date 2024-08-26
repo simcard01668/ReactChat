@@ -3,11 +3,11 @@ import { useUserStore } from '../../../lib/userStore'
 const Userinfo = () => {
 
   const { currentUser, isLoading, fetchUserInfo} = useUserStore()
-  console.log(currentUser)
+
   return (
     <div className='userInfo'>
         <div className="user">
-            <img src='./avatar.png' alt='' />
+            <img src={currentUser.avatar || './avatar.png'} alt='' />
             <h3>{currentUser.username}</h3>
         </div>
         <div className="icons">

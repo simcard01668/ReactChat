@@ -1,5 +1,5 @@
 import './login.css'
-import { auth, db, storage } from 'C:/Users/sim/Desktop/github/ReactChat/src/lib/firebase.js'
+import { auth, db, storage } from '../../lib/firebase.js'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
