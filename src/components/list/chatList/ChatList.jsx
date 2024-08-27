@@ -13,7 +13,6 @@ const chatList = () => {
 
   useEffect(() => {
     const unSub = onSnapshot(doc(db, "userchats",currentUser.id),async(res) => {
-      console.log(res)
       const items = res.data().chat
 
       const promises = items.map(async (item) => {

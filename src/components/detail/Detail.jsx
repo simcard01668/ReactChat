@@ -79,7 +79,7 @@ const [showPhotos, setShowPhotos] = useState(true)
         </div>
 
         <button className="button">Block User</button>
-        <button className="logout" onClick={()=> auth.signOut}>Logout</button>
+        <button className="logout" onClick={()=> auth.signOut()}>Logout</button>
 
       </div>
     </div >
