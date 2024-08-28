@@ -1,6 +1,6 @@
 import './chat.css'
 import EmojiPicker from 'emoji-picker-react'
-import { arrayUnion, doc, onSnapshot, updateDoc } from 'firebase/firestore'
+import { arrayUnion, doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore'
 import { useState, useRef, useEffect } from 'react'
 import { db } from '../../lib/firebase'
 import { useChatStore } from '../../lib/chatStore'
@@ -51,6 +51,23 @@ const Chat = () => {
           createdAt: new Date()
         })
       })
+
+      const userChatsRef = doc(db, 'userChats', currentUser.id)
+      const userChatsSnapshot = await getDoc(userChatsRef)
+      console.log(userChatsSnapshot)
+      if(userChatsSnapshot.exists()){
+        const userChatsData = userChatsSnapshot.data()
+
+        const chatIndex = userChatsData.chat.findIndex(c => c.chatId === chatId)
+
+        userChatsData[chatIndex].lastMessage = text
+        userChatsData[chatIndex].isSeen = true
+        userChatsData[chatIndex].updatedAt = Date.now()
+
+        await updateDoc(userChatsRef, {
+          chats: userChatsData.chat
+      })
+    }
 
     } catch (err) {
       console.log(err)
