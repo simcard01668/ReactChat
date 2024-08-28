@@ -1,9 +1,12 @@
 import './chat.css'
 import EmojiPicker from 'emoji-picker-react'
-import { doc, onSnapshot } from 'firebase/firestore'
+import { arrayUnion, doc, onSnapshot, updateDoc } from 'firebase/firestore'
 import { useState, useRef, useEffect } from 'react'
 import { db } from '../../lib/firebase'
 import { useChatStore } from '../../lib/chatStore'
+import { toast } from 'react-toastify'
+import { useUserStore } from '../../lib/userStore'
+import { create } from 'zustand'
 
 const Chat = () => {
   const [chat, setChat] = useState()
@@ -11,6 +14,7 @@ const Chat = () => {
   const [text, setText] = useState("")
   const endRef = useRef(null)
   const { chatId } = useChatStore()
+  const { currentUser } = useUserStore()
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -20,7 +24,7 @@ const Chat = () => {
   //"fSXgO3moACemTDT5Fu7r"
   useEffect(() => {
     const unSub = onSnapshot(
-      doc(db, "chat", chatId ),
+      doc(db, "chat", chatId),
       (res) => {
         setChat(res.data());
       }
@@ -34,6 +38,24 @@ const Chat = () => {
   const handleEmoji = (e) => {
     setText((prev) => prev + e.emoji)
     setOpen(false)
+  }
+
+  const handleSend = async () => {
+    if (text === "") return;
+    console.log(chatId)
+    try {
+      await updateDoc(doc(db, 'chat', chatId), {
+        messages: arrayUnion({
+          senderId: currentUser,
+          text,
+          createdAt: new Date()
+        })
+      })
+
+    } catch (err) {
+      console.log(err)
+      toast.error(err.message)
+    }
   }
 
   return (
@@ -55,45 +77,16 @@ const Chat = () => {
 
 
       <div className="center">
-        <div className="message">
-          <img src="./avatar.png" alt="" />
-          <div className="text">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.Natus quis quae aui ! Suit asperiores vero nobis destrunt aperiam iustro </p>
-            <span>1 min ago</span>
+        {chat?.messages?.map((message) => (
+          <div className="message own" key={message?.createdAt}>
+            <div className="text">
+              {message.img && <img src={message.img} alt="" />}
+              <p>{message.text}</p>
+              {/* <span>{message.createdAt}</span> */}
+            </div>
           </div>
-        </div>
-
-        <div className="message own">
-          <div className="text">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.Natus quis quae aui ! Suit asperiores vero nobis destrunt aperiam iustro </p>
-            <span>1 min ago</span>
-          </div>
-        </div>
-
-        <div className="message">
-          <img src="./avatar.png" alt="" />
-          <div className="text">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.Natus quis quae aui ! Suit asperiores vero nobis destrunt aperiam iustro </p>
-            <span>1 min ago</span>
-          </div>
-        </div>
-
-        <div className="message own">
-          <div className="text">
-            <img src="./sample.jpg" alt="" />
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.Natus quis quae aui ! Suit asperiores vero nobis destrunt aperiam iustro </p>
-            <span>1 min ago</span>
-          </div>
-        </div>
-
-        <div className="message">
-          <img src="./avatar.png" alt="" />
-          <div className="text">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.Natus quis quae aui ! Suit asperiores vero nobis destrunt aperiam iustro </p>
-            <span>1 min ago</span>
-          </div>
-        </div>
-
+        ))
+        }
         <div ref={endRef}></div>
       </div>
 
@@ -114,7 +107,7 @@ const Chat = () => {
           </div>
 
         </div>
-        <button className="sendButton">Send</button>
+        <button className="sendButton" onClick={handleSend}>Send</button>
       </div>
 
     </div>
