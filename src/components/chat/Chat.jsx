@@ -1,15 +1,35 @@
-import './Chat.css'
+import './chat.css'
 import EmojiPicker from 'emoji-picker-react'
-import { useState , useRef, useEffect } from 'react'
+import { doc, onSnapshot } from 'firebase/firestore'
+import { useState, useRef, useEffect } from 'react'
+import { db } from '../../lib/firebase'
+import { useChatStore } from '../../lib/chatStore'
 
 const Chat = () => {
+  const [chat, setChat] = useState()
   const [open, setOpen] = useState(false)
   const [text, setText] = useState("")
   const endRef = useRef(null)
+  const { chatId } = useChatStore()
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" })
   })
+
+
+  //"fSXgO3moACemTDT5Fu7r"
+  useEffect(() => {
+    const unSub = onSnapshot(
+      doc(db, "chat", chatId ),
+      (res) => {
+        setChat(res.data());
+      }
+    );
+
+    return () => { unSub() };
+  }
+    , [chatId])
+
 
   const handleEmoji = (e) => {
     setText((prev) => prev + e.emoji)
@@ -45,7 +65,7 @@ const Chat = () => {
 
         <div className="message own">
           <div className="text">
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.Natus quis quae aui ! Suit asperiores vero nobis destrunt aperiam iustro </p>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.Natus quis quae aui ! Suit asperiores vero nobis destrunt aperiam iustro </p>
             <span>1 min ago</span>
           </div>
         </div>
@@ -53,7 +73,7 @@ const Chat = () => {
         <div className="message">
           <img src="./avatar.png" alt="" />
           <div className="text">
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.Natus quis quae aui ! Suit asperiores vero nobis destrunt aperiam iustro </p>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.Natus quis quae aui ! Suit asperiores vero nobis destrunt aperiam iustro </p>
             <span>1 min ago</span>
           </div>
         </div>
@@ -61,7 +81,7 @@ const Chat = () => {
         <div className="message own">
           <div className="text">
             <img src="./sample.jpg" alt="" />
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.Natus quis quae aui ! Suit asperiores vero nobis destrunt aperiam iustro </p>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.Natus quis quae aui ! Suit asperiores vero nobis destrunt aperiam iustro </p>
             <span>1 min ago</span>
           </div>
         </div>
@@ -69,7 +89,7 @@ const Chat = () => {
         <div className="message">
           <img src="./avatar.png" alt="" />
           <div className="text">
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.Natus quis quae aui ! Suit asperiores vero nobis destrunt aperiam iustro </p>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.Natus quis quae aui ! Suit asperiores vero nobis destrunt aperiam iustro </p>
             <span>1 min ago</span>
           </div>
         </div>

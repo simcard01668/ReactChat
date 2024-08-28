@@ -80,7 +80,7 @@ const login = () => {
             })
 
             await setDoc(doc(db, "userchats", res.user.uid), {
-                chat: []
+                chats: []
             })
 
             toast.success("User created successfully")

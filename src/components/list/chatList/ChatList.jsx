@@ -4,31 +4,45 @@ import AddUser from './addUser/AddUser'
 import './chatList.css'
 import { useEffect, useState } from 'react'
 import { db } from '../../../lib/firebase'
+import { useChatStore } from '../../../lib/chatStore'
 
 const chatList = () => {
+  const [chats, setChats] = useState([]);
+  const [addMode, setAddMode] = useState(false);
+  const [input, setInput] = useState("");
 
-  const [img, setImg] = useState(false)
-  const [chats, setChats] = useState([])
-  const {currentUser} = useUserStore()
+  const { currentUser } = useUserStore();
+  const { chatId, changeChat } = useChatStore();
 
   useEffect(() => {
-    const unSub = onSnapshot(doc(db, "userchats",currentUser.id),async(res) => {
-      const items = res.data().chat
+    const unSub = onSnapshot(
+      doc(db, "userchats", currentUser.id),
+      async (res) => {
+        const items = res.data().chats;
 
-      const promises = items.map(async (item) => {
-        const userDocRef = doc(db, "users", item.receiverId);
-        const userDocSnap = await getDoc(userDocRef);
+        const promises = items.map(async (item) => {
+          const userDocRef = doc(db, "users", item.receiverId);
+          const userDocSnap = await getDoc(userDocRef);
 
-        const user = userDocSnap.data()
+          const user = userDocSnap.data();
 
-        return { ...item, user }
-      })
-        const chatData = await Promise.all(promises)
+          return { ...item, user };
+        });
 
-        setChats(chatData.sort((a, b) => b.updatedAt - a.updatedAt))
-    
-    return () => unSub()
-  },[currentUser.id])})
+        const chatData = await Promise.all(promises);
+
+        setChats(chatData.sort((a, b) => b.updatedAt - a.updatedAt));
+      }
+    );
+
+    return () => {
+      unSub();
+    };
+  }, [currentUser.id]);
+  
+  const handleSelect = async (chat) => {
+    changeChat(chats[0].chatId, chats[0].user);
+  }
 
   return (
     <div className='chatList'>
@@ -38,15 +52,15 @@ const chatList = () => {
           <input type="text" placeholder='Search' />
         </div>
 
-        <img className='add' src={img ? "./minus.png" : "./plus.png"} alt="" onClick={() => setImg((prev) => !prev)} />
+        <img className='add' src={addMode ? "./minus.png" : "./plus.png"} alt="" onClick={() => setAddMode((prev) => !prev)} />
       </div>
       
       {chats.map((chat) => (
         
-      <div className="item" key={chat.chatId}>
-        <img src="./avatar.png" alt="" />
+      <div className="item" key={chat.chatId} onClick={()=>handleSelect(chat.chatId)}>
+        <img src={chat.user.avatar || 'avatar.png'} alt="" />
         <div className="text">
-          <span>Jane Doe</span>
+          <span>{chat.user.username}</span>
           <p>{chat.lastMessage}</p>
         </div>
       </div>
@@ -55,7 +69,7 @@ const chatList = () => {
 
       
       {
-        img && <AddUser />
+        addMode && <AddUser />
       }
     </div>
   )
