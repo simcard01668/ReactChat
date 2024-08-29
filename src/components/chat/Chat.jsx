@@ -13,7 +13,7 @@ const Chat = () => {
   const [open, setOpen] = useState(false)
   const [text, setText] = useState("")
   const endRef = useRef(null)
-  const { chatId } = useChatStore()
+  const { chatId, user } = useChatStore()
   const { currentUser } = useUserStore()
 
   useEffect(() => {
@@ -40,35 +40,39 @@ const Chat = () => {
     setOpen(false)
   }
 
+
   const handleSend = async () => {
     if (text === "") return;
-    console.log(chatId)
     try {
       await updateDoc(doc(db, 'chat', chatId), {
         messages: arrayUnion({
-          senderId: currentUser,
+          senderId: currentUser.id,
           text,
           createdAt: new Date()
         })
       })
 
-      const userChatsRef = doc(db, 'userChats', currentUser.id)
-      const userChatsSnapshot = await getDoc(userChatsRef)
-      console.log(userChatsSnapshot)
-      if(userChatsSnapshot.exists()){
-        const userChatsData = userChatsSnapshot.data()
+      const userIDs = [currentUser.id, user.id]
 
-        const chatIndex = userChatsData.chat.findIndex(c => c.chatId === chatId)
+      userIDs.forEach(async (id) => {
 
-        userChatsData[chatIndex].lastMessage = text
-        userChatsData[chatIndex].isSeen = true
-        userChatsData[chatIndex].updatedAt = Date.now()
+        const userChatsRef = doc(db, 'userchats', id)
+        const userChatsSnapshot = await getDoc(userChatsRef)
+        
+        if (userChatsSnapshot.exists()) {
+          const userChatsData = userChatsSnapshot.data()
+          const chatIndex = userChatsData.chats.findIndex(c => c.chatId === chatId)
+ 
 
-        await updateDoc(userChatsRef, {
-          chats: userChatsData.chat
+          userChatsData.chats[chatIndex].lastMessage = text
+          userChatsData.chats[chatIndex].isSeen = id === currentUser.id ? true : false
+          userChatsData.chats[chatIndex].updatedAt = Date.now()
+          console.log(userChatsData.chats[chatIndex])
+          await updateDoc(userChatsRef, {
+            chats: userChatsData.chats
+          })
+        }
       })
-    }
-
     } catch (err) {
       console.log(err)
       toast.error(err.message)
