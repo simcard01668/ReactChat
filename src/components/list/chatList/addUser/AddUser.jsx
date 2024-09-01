@@ -70,6 +70,7 @@ const AddUser = () => {
     }
     return (
         <div className="addUser">
+            <button>Back</button>
             <form action="" onSubmit={handleSearch}>
                 <input type="text" placeholder='Username' name='username' />
                 <button>Search</button>

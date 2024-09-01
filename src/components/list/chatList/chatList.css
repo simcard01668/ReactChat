@@ -3,6 +3,9 @@
     flex:1;
     overflow-y: scroll;
     scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.473) #2b3f4e;
+
+
 
     .search {
         
