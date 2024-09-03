@@ -1,0 +1,43 @@
+.userSetting {
+    width: max-content;
+    height: max-content;
+    
+    padding: 30px;
+    background-color: rgba(17, 25, 40, 0.8);
+    color: white;
+    border-radius: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    
+    .text-input {
+        font-size: 20px;
+        line-height: 1;
+        min-width: 300px;
+        background-color: rgba(160, 169, 185, 0.111);
+        color: white;
+        border-radius: 20px;
+        padding: 20px;
+    }
+
+    .text-input::placeholder {
+        color: rgba(255, 255, 255, 0.434);
+    }
+
+    button {
+        padding: 10px;
+        width: 20%;
+        background-color: rgb(127, 244, 255);
+        border: none;
+        outline: none;
+        border-radius: 20px;
+    }
+}
+
