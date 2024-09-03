@@ -5,7 +5,7 @@ import { collection, getDocs, getDoc, query, where, doc, setDoc, serverTimestamp
 import { toast } from 'react-toastify'
 import { useUserStore } from '../../../../lib/userStore'
 
-const AddUser = () => {
+const AddUser = ({close}) => {
     const [user, setUser] = useState(null)
 
     const { currentUser } = useUserStore()
@@ -70,7 +70,7 @@ const AddUser = () => {
     }
     return (
         <div className="addUser">
-            <button>Back</button>
+            <button className='backButton' onClick={close}>Back</button>
             <form action="" onSubmit={handleSearch}>
                 <input type="text" placeholder='Username' name='username' />
                 <button>Search</button>

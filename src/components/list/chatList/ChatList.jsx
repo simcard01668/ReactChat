@@ -89,7 +89,7 @@ const chatList = () => {
 
       
       {
-        addMode && <AddUser />
+        addMode && <AddUser close={()=>setAddMode(false)}/>
       }
 
 

@@ -8,6 +8,7 @@ import { onAuthStateChanged } from "firebase/auth"
 import { auth } from "./lib/firebase"
 import { useUserStore } from "./lib/userStore"
 import { useChatStore } from "./lib/chatStore"
+import Selectchat from "./components/selectchat/Selectchat"
 
 
 const App = () => {
@@ -32,6 +33,7 @@ const App = () => {
         currentUser ? (
         <>
         <List />
+        {!chatId && <Selectchat />}
         {chatId && <Chat />}
         {chatId && <Detail /> }
         </>
