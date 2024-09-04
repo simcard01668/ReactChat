@@ -19,7 +19,7 @@ const Userinfo = () => {
         </div>
 
         {
-        addDetail && <UserSetting />
+        addDetail && <UserSetting setBack={()=>setAddDetail(false)}/>
       }
     </div>
 

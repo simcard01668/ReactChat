@@ -38,6 +38,11 @@
         border: none;
         outline: none;
         border-radius: 20px;
+
+        &.backButton {
+            background-color: rgb(255, 127, 127);
+            align-self: flex-end;
+        }
     }
 }
 

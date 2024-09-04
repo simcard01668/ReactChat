@@ -5,6 +5,7 @@
     align-items: center;
     height: 100%;
     width: 100%;
-    background-color: #f5f5f5;
+    background-color: rgba(53, 96, 124, 0);
+    backdrop-filter: blur(15px) saturate(180%);
     flex: 3;
 }

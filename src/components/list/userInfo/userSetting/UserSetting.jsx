@@ -1,8 +1,10 @@
 import "./userSetting.css";
 
-const UserSetting = () => {
+const UserSetting = ({setBack}) => {
+  
   return (
     <div className="userSetting">
+      <button className="backButton" onClick={setBack}>back</button>
       <h2>User Setting</h2>
       <input
         className="text-input"
