@@ -78,7 +78,7 @@ const chatList = () => {
       {filteredChats.map((chat) => (
         
       <div className="item" key={chat.chatId} style={{backgroundColor: chat?.isSeen ? "transparent" : "#5183fe"}} onClick={()=>handleSelect(chat.chatId)} >
-        <img src={chat.user.blocked.includes(currentUser.id) ? 'avatar.png' : chat.user.avatar} alt="" />
+        <img src={chat.user.blocked.includes(currentUser.id) ? 'avatar.png' : chat.user.avatar || 'avatar.png'} alt="" />
         <div className="text">
           <span>{chat.user.blocked.includes(currentUser.id) ? "User" : chat.user.username}</span>
           <p>{chat.lastMessage}</p>
