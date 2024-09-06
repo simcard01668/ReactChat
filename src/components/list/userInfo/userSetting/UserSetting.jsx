@@ -3,8 +3,23 @@ import "./userSetting.css";
 import { db } from "../../../../lib/firebase";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { useUserStore } from "../../../../lib/userStore";
+import { useState } from "react";
 
 const UserSetting = ({ setBack }) => {
+
+  const [Img, setImg] = useState({
+    file: null,
+    url: ""
+  })
+
+  function handleImg(e) {
+    if (e.target.files[0]) {
+      setImg({
+        file: e.target.files[0],
+        url: URL.createObjectURL(e.target.files[0])
+      })
+    }
+  }
 
   const { currentUser } = useUserStore();
   const handleSave = async (e) => {
@@ -46,7 +61,7 @@ const UserSetting = ({ setBack }) => {
           name="email"
           placeholder="Update your email"
         />
-        <input type="file" placeholder="Update your avatar" />
+        <input className='imageButton' type="file" placeholder="Update your avatar" />
         <textarea
           className="text-input"
           placeholder="Update your personal introduction message"

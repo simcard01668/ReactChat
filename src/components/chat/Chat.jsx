@@ -119,7 +119,7 @@ const Chat = () => {
           <img src={user?.avatar || './avatar.png'} alt="" />
           <div className="texts">
             <span>{user?.username}</span>
-            <p>Lorem doloar hello backghround color is cool this way,.</p>
+            <p>{user?.introduction}</p>
           </div>
         </div>
         <div className="icons">

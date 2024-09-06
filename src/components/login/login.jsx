@@ -13,8 +13,6 @@ const login = () => {
         url: ""
     })
 
-
-
     function handleImg(e) {
         if (e.target.files[0]) {
             setImg({

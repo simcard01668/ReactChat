@@ -3,7 +3,7 @@
     height: max-content;
     
     padding: 30px;
-    background-color: rgba(17, 25, 40, 0.8);
+    background-color: rgba(17, 25, 40, 0.99);
     color: white;
     border-radius: 10px;
     position: absolute;
@@ -21,6 +21,10 @@
         display: flex;
         flex-direction: column;
         gap: 20px;
+    }
+
+    .imageButton {
+    
     }
     
     .text-input {
@@ -44,10 +48,13 @@
         border: none;
         outline: none;
         border-radius: 20px;
-
+        cursor: pointer;
+        align-self: center;
+        
         &.backButton {
             background-color: rgb(255, 127, 127);
             align-self: flex-end;
+            cursor: pointer;
         }
     }
 }
