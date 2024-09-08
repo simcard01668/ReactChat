@@ -22,4 +22,6 @@ export const useUserStore = create((set) => ({
       return set({ currentUser: null, isLoading: false });
     }
   },
+   // Update user info locally
+   setCurrentUser: (userData) => set({ currentUser: userData }),
 }));

@@ -21,6 +21,30 @@
         display: flex;
         flex-direction: column;
         gap: 20px;
+
+        .imgContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+
+            img {
+                width: 150px;
+                height: 150px;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+
+            label {
+                font-weight: 800;
+                color: white;
+                padding: 15px;
+                text-decoration: underline;
+                cursor: pointer;
+                background-color: rgba(141, 137, 137, 0.288);
+                border-radius: 10px;
+            }
+        }
     }
 
     .imageButton {
@@ -38,7 +62,7 @@
     }
 
     .text-input::placeholder {
-        color: rgba(255, 255, 255, 0.434);
+        color: rgb(194, 189, 189);
     }
 
     button {

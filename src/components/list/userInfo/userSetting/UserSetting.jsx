@@ -4,6 +4,7 @@ import { db } from "../../../../lib/firebase";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { useUserStore } from "../../../../lib/userStore";
 import { useState } from "react";
+import upload from "../../../../lib/upload";
 
 const UserSetting = ({ setBack }) => {
 
@@ -21,24 +22,35 @@ const UserSetting = ({ setBack }) => {
     }
   }
 
-  const { currentUser } = useUserStore();
+  const { currentUser, setCurrentUser } = useUserStore();
+
+  //save user setting
   const handleSave = async (e) => {
+    toast.info("Please wait while we save your setting");
     e.preventDefault();
     const formData = new FormData(e.target);
     const { username, email, avatar, introduction } = Object.fromEntries(formData);
     const updateData = {};
 
-    // Check if each field has a value and add it to the updateData object
     if (username) updateData.username = username;
     if (email) updateData.email = email;
     if (introduction) updateData.introduction = introduction;
 
     try {
-     await updateDoc(doc(db, "users", currentUser.id), updateData);   
+      if (Img.file) {
+        const imgUrl = await upload(Img.file);
+        updateData.avatar = imgUrl;
+      }
+      await updateDoc(doc(db, "users", currentUser.id), updateData);
+
+      setCurrentUser({ ...currentUser, ...updateData });
+
+
+      toast.success("User setting saved successfully");
 
     } catch (err) {
       console.log(err);
-      toast.error("Failed to save user setting");
+      toast.error("Failed to save user setting" + err.message);
     }
   };
 
@@ -53,21 +65,30 @@ const UserSetting = ({ setBack }) => {
           className="text-input"
           type="text"
           name="username"
-          placeholder="Update your username"
+          placeholder={currentUser.username}  
+          maxLength={15}
         />
         <input
           className="text-input"
           type="text"
           name="email"
-          placeholder="Update your email"
+          placeholder={currentUser.email}
+          maxLength={40}
         />
-        <input className='imageButton' type="file" placeholder="Update your avatar" />
+
+        <div className="imgContainer">
+          <input className='imageButton' id="file" type="file" placeholder="Update your avatar" style={{display: "none"}} onChange={handleImg}/>
+          <img src={Img.url || currentUser.avatar || 'avatar.png'} alt="" />
+          <label htmlFor="file">Update your avatar</label>
+        </div>
+
         <textarea
           className="text-input"
-          placeholder="Update your personal introduction message"
+          placeholder={currentUser.introduction || "Write something about yourself"}
           name="introduction"
           rows="4"
           cols="40"
+          maxLength={100}
         ></textarea>
         <button>Save</button>
       </form>

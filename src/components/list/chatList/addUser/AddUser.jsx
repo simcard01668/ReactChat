@@ -5,11 +5,10 @@ import { collection, getDocs, getDoc, query, where, doc, setDoc, serverTimestamp
 import { toast } from 'react-toastify'
 import { useUserStore } from '../../../../lib/userStore'
 
-const AddUser = ({close}) => {
-    const [user, setUser] = useState(null)
+const AddUser = ({close, chatList}) => {
+    const [userId, setUser] = useState(null)
 
     const { currentUser } = useUserStore()
-
     const handleSearch = async e => {
         e.preventDefault()
         const formData = new FormData(e.target)
@@ -37,6 +36,11 @@ const AddUser = ({close}) => {
         const chatRef = collection(db, 'chat')
         const userChatRef = collection(db, 'userchats')
 
+        if(chatList.find(chat => chat.user.username === userId.username)) {
+            toast.error('User already added')
+            return
+        }
+
         try {
             const newChatRef =doc(chatRef)
 
@@ -45,7 +49,7 @@ const AddUser = ({close}) => {
                 message: []
             })
 
-            await updateDoc(doc(userChatRef, user.id), 
+            await updateDoc(doc(userChatRef, userId.id), 
             { chats: arrayUnion({
                 chatId: newChatRef.id,
                 lastMessage: '',
@@ -58,7 +62,7 @@ const AddUser = ({close}) => {
             { chats: arrayUnion({
                 chatId: newChatRef.id,
                 lastMessage: '',
-                receiverId: user.id,
+                receiverId: userId.id,
                 updatedAt: Date.now()
             })
             })
@@ -76,10 +80,10 @@ const AddUser = ({close}) => {
                 <button>Search</button>
             </form>
 
-            {user && <div className="user">
+            {userId && <div className="user">
                 <div className="detail">
-                    <img src={user.avatar || "./avatar.png"} alt="" />
-                    <span>{user.username}</span>
+                    <img src={userId.avatar || "./avatar.png"} alt="" />
+                    <span>{userId.username}</span>
                 </div>
                 <button onClick={handleAdd}>Add User</button>
             </div>}

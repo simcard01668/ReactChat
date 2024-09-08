@@ -53,7 +53,7 @@ const chatList = () => {
     const userChatsRef = doc(db, 'userchats', currentUser.id);
     try {
       await updateDoc(userChatsRef, { chats: userChats });
-      changeChat(chats[0].chatId, chats[0].user);
+      changeChat(chats[chatIndex].chatId, chats[chatIndex].user);
     } catch (error) {
       console.error(error);
     }
@@ -89,7 +89,7 @@ const chatList = () => {
 
       
       {
-        addMode && <AddUser close={()=>setAddMode(false)}/>
+        addMode && <AddUser close={()=>setAddMode(false)} chatList={chats}/>
       }
 
 

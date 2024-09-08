@@ -8,11 +8,13 @@ import upload from '../../lib/upload'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 
 const login = () => {
+    //initializing the state
     const [Img, setImg] = useState({
         file: null,
         url: ""
     })
 
+    //function to handle the image
     function handleImg(e) {
         if (e.target.files[0]) {
             setImg({
@@ -45,6 +47,7 @@ const login = () => {
     }
 
     async function handleRegister(e) {
+        toast.info("Please wait while we create your account")
         e.preventDefault()
         const formData = new FormData(e.target)
         const { username, email, password } = Object.fromEntries(formData)
@@ -83,6 +86,7 @@ const login = () => {
             })
 
             toast.success("User created successfully")
+
         } catch (err) {
             toast.error(err.message)
             console.log(err)
