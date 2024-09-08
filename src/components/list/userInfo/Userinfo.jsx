@@ -1,6 +1,6 @@
 import './userinfo.css'
 import { useUserStore } from '../../../lib/userStore'
-import UserSetting from './UserSetting/userSetting'
+import UserSetting from './userSetting/UserSetting'
 import { useState } from 'react'
 const Userinfo = () => {
   const [addDetail, setAddDetail] = useState(false)
